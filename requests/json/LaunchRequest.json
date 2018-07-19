@@ -1,0 +1,26 @@
+{
+    "version": "1.0",
+    "session": {
+        "new": true,
+        "application": {
+        },
+        "user": {}
+    },
+    "context": {
+        "System": {
+            "application": {
+            },
+            "user": {},
+            "device": {
+                "supportedInterfaces": {}
+            },
+            "apiEndpoint": "https://api.eu.amazonalexa.com"
+        }
+    },
+    "request": {
+        "type": "LaunchRequest",
+        "timestamp": "2018-07-19T11:00:21Z",
+        "locale": "en-US",
+        "shouldLinkResultBeReturned": false
+    }
+}

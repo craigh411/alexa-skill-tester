@@ -1,0 +1,29 @@
+{
+  "name": "alexa-skill-tester",
+  "version": "1.0.0",
+  "description": "Allows you to send requests to your lambda function locally for testing",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node index.js",
+    "test": "mocha tests --require babel-core/register || exit 0"
+  },
+  "keywords": [
+    "alexa",
+    "test",
+    "alexa",
+    "requests"
+  ],
+  "author": "Craig Humphreys",
+  "license": "MIT",
+  "dependencies": {
+    "lambda-local": "^1.5.1",
+    "randexp": "0.4.9"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "webpack": "^4.16.1"
+  }
+}
