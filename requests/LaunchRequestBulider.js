@@ -1,5 +1,5 @@
-const RequestBuilder = require('./RequestBuilder')
-const LaunchRequest = require('./json/LaunchRequest.json')
+import RequestBuilder from './RequestBuilder'
+import LaunchRequest from './json/LaunchRequest.json'
 
 class LaunchRequestBuilder extends RequestBuilder {
   constructor(request = {}) {
@@ -7,4 +7,4 @@ class LaunchRequestBuilder extends RequestBuilder {
   }
 }
 
-module.exports = LaunchRequestBuilder
+export default LaunchRequestBuilder
