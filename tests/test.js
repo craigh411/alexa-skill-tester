@@ -1,10 +1,10 @@
 import { expect } from 'chai'
 import { RequestBuilder } from '../index'
 
-describe('RequestBuilder', function() {
-    it('should set the version', function() {
+describe('RequestBuilder', () => {
+    it('should set the version', () => {
         const builder = new RequestBuilder()
-        // Default's to 1.0
+        // Defaults to 1.0
         expect(builder.getVersion()).to.be.equal('1.0')
         // Change version
         builder.setVersion('2.0')
@@ -12,7 +12,7 @@ describe('RequestBuilder', function() {
         expect(builder.getVersion()).to.be.equal('2.0')
     });
 
-    it('should set new session', function() {
+    it('should set new session', () => {
         const builder = new RequestBuilder()
         // Default's to true
         expect(builder.getIsNewSession()).to.be.true
@@ -23,7 +23,7 @@ describe('RequestBuilder', function() {
     });
 
 
-    it('should set the session id to the passed param', function() {
+    it('should set the session id to the passed param', () => {
         const builder = new RequestBuilder()
         // Change session Id
         builder.setSessionId('foo')
@@ -32,7 +32,7 @@ describe('RequestBuilder', function() {
     });
 
 
-    it('should set the locale', function() {
+    it('should set the locale', () => {
         const builder = new RequestBuilder()
         // Default's to en-US
         expect(builder.getLocale()).to.be.equal('en-US')
