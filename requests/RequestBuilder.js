@@ -27,7 +27,12 @@ class RequestBuilder {
 
     setVersion(version) {
         this.request.version = version
+        
         return this
+    }
+
+    getVersion() {
+        return this.request.version
     }
 
     setIsNewSession(isNew) {
@@ -35,11 +40,20 @@ class RequestBuilder {
         return this
     }
 
+    getIsNewSession(isNew) {
+        return this.request.session.new
+    }
+
+
     setSessionId(id) {
         let sessionId = id || this.generateRandomString('amzn1.ask.session')
 
         this.request.session.sessionId = sessionId
         return this
+    }
+
+    getSessionId() {
+        return this.request.session.sessionId
     }
 
     setApplicationId(id) {
@@ -103,6 +117,10 @@ class RequestBuilder {
     setLocale(locale) {
         this.request.request.locale = locale
         return this
+    }
+
+    getLocale() {
+        return this.request.request.locale
     }
 
     setTimestamp(timestamp) {
