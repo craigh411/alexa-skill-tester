@@ -1,5 +1,7 @@
-import RequestBuilder from './requests/LaunchRequestBulider'
+import RequestBuilder from './requests/RequestBulider'
+import LaunchRequestBuilder from './requests/LaunchRequestBulider'
 
 export {
-    RequestBuilder
+    RequestBuilder,
+    LaunchRequestBuilder
 }
