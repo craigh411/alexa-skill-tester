@@ -1,4 +1,4 @@
-import { expect } from 'chai'
+import { expect, assert } from 'chai'
 import RequestBuilder from '../requests/RequestBuilder'
 import LaunchRequest from '../requests/json/LaunchRequest.json'
 import cloneDeep from 'lodash.clonedeep'
@@ -127,6 +127,42 @@ describe('RequestBuilder', () => {
 
     });
 
+
+    it('should set the request id to the passed param', () => {
+
+        const builder = new RequestBuilder(LaunchRequest)
+        builder.setRequestId('foo')
+
+        expect(builder.getRequestId()).to.equal('foo')
+
+    });
+
+    it('should set the device id to a random id', () => {
+
+        const builder = new RequestBuilder(LaunchRequest)
+
+        expect(builder.getRequestId()).to.match(/amzn1\.echo-api\.request\.[a-z0-9-]+/)
+
+    });
+
+    it('should set the api access token to the passed param', () => {
+
+        const builder = new RequestBuilder(LaunchRequest)
+        builder.setApiAccessToken('foo')
+
+        expect(builder.getApiAccessToken()).to.equal('foo')
+
+    });
+
+    it('should set the api access token to a random token', () => {
+
+        const builder = new RequestBuilder(LaunchRequest)
+        builder.setApiAccessToken()
+
+        expect(builder.getApiAccessToken()).to.match(/[A-Z0-9_]+/)
+
+    });
+
     it('should set the locale', () => {
         const builder = new RequestBuilder(LaunchRequest)
         // Default's to en-US
@@ -135,6 +171,37 @@ describe('RequestBuilder', () => {
         builder.setLocale('en-GB')
         // get request
         expect(builder.getLocale(LaunchRequest)).to.be.equal('en-GB')
+    });
+
+
+   it('should set the timestamp to the passed param', () => {
+        const builder = new RequestBuilder(LaunchRequest)
+        builder.setTimestamp('foo')
+
+        expect(builder.getTimestamp()).to.equal('foo')
+    });
+
+   it('should set supported interfaces to the passed param', () => {
+        const builder = new RequestBuilder(cloneDeep(LaunchRequest))
+        builder.setSupportedInterfaces({
+        	foo : 'bar'
+        })
+
+        expect(builder.getSupportedInterfaces().foo).to.equal('bar')
+    });
+
+   it('should set the AudioPlayer interface', () => {
+        const builder = new RequestBuilder(cloneDeep(LaunchRequest))
+        builder.supportsAudioInterface()
+        assert.isObject(builder.getSupportedInterfaces().AudioPlayer)
+    });
+
+
+   it('should set the timestamp to the current UTC time', () => {
+        const builder = new RequestBuilder(LaunchRequest)
+        const now =  new Date(new Date().toUTCString().substr(0, 25)).toISOString()
+
+        expect(builder.getTimestamp()).to.equal(now)
     });
 
 });
