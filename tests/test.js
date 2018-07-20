@@ -1,7 +1,9 @@
 import { expect, assert } from 'chai'
 import RequestBuilder from '../requests/RequestBuilder'
+import Request from '../handlers/Request'
 import LaunchRequest from '../requests/json/LaunchRequest.json'
 import cloneDeep from 'lodash.clonedeep'
+import path from 'path'
 
 describe('RequestBuilder', () => {
 
@@ -39,7 +41,7 @@ describe('RequestBuilder', () => {
     it('should set the session id to a random id', () => {
 
         const sessionId1 = new RequestBuilder(cloneDeep(LaunchRequest))
-		const sessionId2 = new RequestBuilder(cloneDeep(LaunchRequest))
+        const sessionId2 = new RequestBuilder(cloneDeep(LaunchRequest))
 
 
         expect(sessionId1.getSessionId()).not.to.equal(sessionId2.getSessionId())
@@ -58,7 +60,7 @@ describe('RequestBuilder', () => {
     it('should set the application id to a random id', () => {
 
         const applicationId1 = new RequestBuilder(cloneDeep(LaunchRequest))
-		const applicationId2 = new RequestBuilder(cloneDeep(LaunchRequest))
+        const applicationId2 = new RequestBuilder(cloneDeep(LaunchRequest))
 
         expect(applicationId1.getApplicationId()).not.to.equal(applicationId2.getApplicationId())
 
@@ -86,7 +88,7 @@ describe('RequestBuilder', () => {
     it('should set the user id to a random id', () => {
 
         const userId1 = new RequestBuilder(cloneDeep(LaunchRequest))
-		const userId2 = new RequestBuilder(cloneDeep(LaunchRequest))
+        const userId2 = new RequestBuilder(cloneDeep(LaunchRequest))
 
         expect(userId1.getUserId()).not.to.equal(userId2.getUserId())
 
@@ -174,34 +176,65 @@ describe('RequestBuilder', () => {
     });
 
 
-   it('should set the timestamp to the passed param', () => {
+    it('should set the timestamp to the passed param', () => {
         const builder = new RequestBuilder(LaunchRequest)
         builder.setTimestamp('foo')
 
         expect(builder.getTimestamp()).to.equal('foo')
     });
 
-   it('should set supported interfaces to the passed param', () => {
+    it('should set supported interfaces to the passed param', () => {
         const builder = new RequestBuilder(cloneDeep(LaunchRequest))
         builder.setSupportedInterfaces({
-        	foo : 'bar'
+            foo: 'bar'
         })
 
         expect(builder.getSupportedInterfaces().foo).to.equal('bar')
     });
 
-   it('should set the AudioPlayer interface', () => {
+    it('should set the AudioPlayer interface', () => {
         const builder = new RequestBuilder(cloneDeep(LaunchRequest))
         builder.supportsAudioInterface()
         assert.isObject(builder.getSupportedInterfaces().AudioPlayer)
     });
 
 
-   it('should set the timestamp to the current UTC time', () => {
+    it('should set the timestamp to the current UTC time', () => {
         const builder = new RequestBuilder(LaunchRequest)
-        const now =  new Date(new Date().toUTCString().substr(0, 25)).toISOString()
+        const now = new Date(new Date().toUTCString().substr(0, 25)).toISOString()
 
         expect(builder.getTimestamp()).to.equal(now)
     });
 
+
+    it('should set the config', () => {
+        RequestBuilder.config = {
+            lambdaPath: 'bar',
+            lambdaHandler: 'baz',
+            timeoutMs: 'qux'
+        }
+
+        const config = RequestBuilder.config
+
+        expect(config.lambdaPath).to.equal('bar')
+        expect(config.lambdaHandler).to.equal('baz')
+        expect(config.timeoutMs).to.equal('qux')
+    });
+
+});
+
+
+
+describe('Request', () => {
+    it('should return the launch response', async() => {
+        const config = {
+            lambdaPath: path.join(__dirname, '/helpers', '/helloworld.js'),
+            lambdaHandler: 'handler',
+            timeoutMs: 3000,
+        }
+
+        const response = await Request.send(LaunchRequest, config, true)
+        expect(response.response.outputSpeech.ssml).to.equal('<speak>Hello World!</speak>')
+
+    });
 });

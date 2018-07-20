@@ -2,13 +2,30 @@ import Request from '../handlers/Request'
 import RandExp from 'randexp'
 
 export default class RequestBuilder {
+
+
+
     constructor(request) {
         this.request = request
+
+
         this.buildRequest()
     }
 
+   get config() {
+      return this.config
+    }
+
+    set config(config = {}) {
+      this.config = Object.assign(this.config = {
+            lambdaPath: './index.js',
+            lambdaHandler: 'handler',
+            timeoutMs:  3000
+        }, config)
+    }
+
     send() {
-        Request.send(this.request)
+        Request.send(this.request, this.config)
     }
 
     getRequest() {
