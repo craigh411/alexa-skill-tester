@@ -1,6 +1,7 @@
 const lambdaLocal = require('lambda-local');
 import path from 'path'
 import winston from 'winston'
+import RequestBuilder from '../requests/RequestBuilder'
 
 class Request {
     static async send(request, config, suppressConsoleOutput = false, logFile = null) {
@@ -8,6 +9,9 @@ class Request {
         if (!!logFile || suppressConsoleOutput) {
             this.setLogger(suppressConsoleOutput, logFile)
         }
+
+        request = (request instanceof RequestBuilder) ? request.getRequest() : request
+        config = Object.assign(this.getDefaultConfig(), config)
 
         return await new Promise((resolve, reject) => {
             lambdaLocal.execute({
@@ -34,6 +38,14 @@ class Request {
         lambdaLocal.setLogger(new(winston.Logger)({
             transports: transports
         }));
+    }
+
+    static getDefaultConfig() {
+    	return {
+            lambdaPath: '../../../index.js', // this is probably the root, but it can be overridden
+            lambdaHandler: 'handler',
+            timeoutMs: 3000,
+    	}
     }
 }
 

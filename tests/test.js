@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai'
-import RequestBuilder from '../requests/RequestBuilder'
+import { RequestBuilder, LaunchRequestBuilder } from '../index.js'
 import Request from '../handlers/Request'
 import LaunchRequest from '../requests/json/LaunchRequest.json'
 import cloneDeep from 'lodash.clonedeep'
@@ -229,11 +229,23 @@ describe('Request', () => {
     it('should return the launch response', async() => {
         const config = {
             lambdaPath: path.join(__dirname, '/helpers', '/helloworld.js'),
-            lambdaHandler: 'handler',
-            timeoutMs: 3000,
         }
 
         const response = await Request.send(LaunchRequest, config, true)
+        expect(response.response.outputSpeech.ssml).to.equal('<speak>Hello World!</speak>')
+
+    });
+});
+
+describe('LaunchRequestBuilder', () => {
+    it('should send the launch request', async() => {
+        const request = new LaunchRequestBuilder();
+        var config = {
+            lambdaPath: path.join(__dirname, '/helpers', '/helloworld.js')
+        }
+
+
+        const response = await Request.send(request, config, true)
         expect(response.response.outputSpeech.ssml).to.equal('<speak>Hello World!</speak>')
 
     });
