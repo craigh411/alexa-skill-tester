@@ -60,7 +60,12 @@ export default class RequestBuilder {
 
             this.request.session.application.applicationId = applicationId
             this.request.context.System.application.applicationId = applicationId
+
             return this
+        }
+
+        getApplicationId() {
+          return this.request.session.application.applicationId
         }
 
         setUserId(id) {
@@ -72,12 +77,20 @@ export default class RequestBuilder {
             return this
         }
 
+        getUserId() {
+          return  this.request.session.user.userId
+        }
+
         setDeviceId(id) {
             let deviceId = id || new RandExp(/amzn1\.ask\.device\.[0-9A-Z]{156}/).gen();
 
             this.request.context.System.device.deviceId = deviceId
 
             return this
+        }
+
+        getDeviceId() {
+          return this.request.context.System.device.deviceId
         }
 
         setInterfaces(interfaces) {
@@ -92,6 +105,9 @@ export default class RequestBuilder {
             return this
         }
 
+        getApiEndpoint() {
+          return  this.request.context.System.apiEndpoint
+        }
 
         /**
          * Set request Id
