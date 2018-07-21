@@ -175,6 +175,15 @@ export default class RequestBuilder {
         return this.request.request.timestamp
     }
 
+
+    setIntentName(intentName) {
+        this.request.request.intent.name = intentName
+    }
+
+    getIntentName() {
+        return this.request.request.intent.name
+    }
+    
     generateRandomString(prepend = '') {
         var string = new RandExp(/[0-9a-z]{7}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{11}[0-9]/).gen();
 

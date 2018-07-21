@@ -206,6 +206,12 @@ describe('RequestBuilder', () => {
         expect(builder.getTimestamp()).to.equal(now)
     });
 
+    it('should set the intent name', async() => {
+        const builder = new IntentRequestBuilder('foo');
+
+        expect(builder.getIntentName()).to.equal('foo')      
+    });
+    
 
     it('should set the config', () => {
         RequestBuilder.config = {
@@ -253,9 +259,5 @@ describe('LaunchRequestBuilder', () => {
 });
 
 describe('IntentRequestBuilder', () => {
-    it('should set the intent name', async() => {
-        const builder = new IntentRequestBuilder('foo');
 
-        expect(builder.getIntentName()).to.equal('foo')      
-    });
 });
