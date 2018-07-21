@@ -2,6 +2,7 @@ import { expect, assert } from 'chai'
 import { RequestBuilder, LaunchRequestBuilder, IntentRequestBuilder } from '../index.js'
 import Request from '../handlers/Request'
 import LaunchRequest from '../requests/json/LaunchRequest.json'
+import IntentRequest from '../requests/json/IntentRequest.json'
 import cloneDeep from 'lodash.clonedeep'
 import path from 'path'
 
@@ -207,11 +208,19 @@ describe('RequestBuilder', () => {
     });
 
     it('should set the intent name', async() => {
-        const builder = new IntentRequestBuilder('foo');
+        const builder = new RequestBuilder(cloneDeep(IntentRequest))
+        builder.setIntentName('foo')
 
-        expect(builder.getIntentName()).to.equal('foo')      
+        expect(builder.getIntentName()).to.equal('foo')
     });
-    
+
+
+    it('should set the request type', async() => {
+        const builder = new RequestBuilder(cloneDeep(IntentRequest))
+        builder.setRequestType('foo')
+        
+        expect(builder.getRequestType()).to.equal('foo')
+    });
 
     it('should set the config', () => {
         RequestBuilder.config = {
@@ -244,6 +253,13 @@ describe('Request', () => {
 });
 
 describe('LaunchRequestBuilder', () => {
+	 it('should generate a LaunchRequest', async() => {
+        const builder = new LaunchRequestBuilder();
+
+        expect(builder.getRequestType()).to.equal('LaunchRequest')
+    });
+
+
     it('should send the launch request', async() => {
         const request = new LaunchRequestBuilder();
         var config = {
@@ -259,5 +275,17 @@ describe('LaunchRequestBuilder', () => {
 });
 
 describe('IntentRequestBuilder', () => {
+    it('should generate an IntentRequest', async() => {
+        const builder = new IntentRequestBuilder('foo');
+
+        expect(builder.getRequestType()).to.equal('IntentRequest')
+    });
+
+
+    it('should set the intent name', async() => {
+        const builder = new IntentRequestBuilder('foo');
+
+        expect(builder.getIntentName()).to.equal('foo')
+    });
 
 });
