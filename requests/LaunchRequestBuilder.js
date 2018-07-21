@@ -6,7 +6,5 @@ export default class LaunchRequestBuilder extends RequestBuilder {
     constructor(request = {}) {
         request = Object.assign(LaunchRequest, request)
         super(cloneDeep(request))
-
-        return this
     }
 }

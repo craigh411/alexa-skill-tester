@@ -1,16 +1,20 @@
 {
     "version": "1.0",
     "session": {
-        "new": true,
+        "new": false,
         "application": {
         },
-        "user": {}
+        "user": {    
+        }
     },
     "context": {
         "System": {
             "application": {
+
             },
-            "user": {},
+            "user": {
+
+            },
             "device": {
                 "supportedInterfaces": {}
             },
@@ -18,8 +22,13 @@
         }
     },
     "request": {
-        "type": "LaunchRequest",
+        "type": "IntentRequest",
+        "requestId": "amzn1.echo-api.request.e5794d27-ed8b-412c-9145-3f5c87a3fcf5",
+        "timestamp": "2018-07-21T12:28:47Z",
         "locale": "en-US",
-        "shouldLinkResultBeReturned": false
+        "intent": {
+            "name": "AMAZON.StopIntent",
+            "confirmationStatus": "NONE"
+        }
     }
 }

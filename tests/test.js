@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai'
-import { RequestBuilder, LaunchRequestBuilder } from '../index.js'
+import { RequestBuilder, LaunchRequestBuilder, IntentRequestBuilder } from '../index.js'
 import Request from '../handlers/Request'
 import LaunchRequest from '../requests/json/LaunchRequest.json'
 import cloneDeep from 'lodash.clonedeep'
@@ -248,5 +248,14 @@ describe('LaunchRequestBuilder', () => {
         const response = await Request.send(request, config, true)
         expect(response.response.outputSpeech.ssml).to.equal('<speak>Hello World!</speak>')
 
+    });
+
+});
+
+describe('IntentRequestBuilder', () => {
+    it('should set the intent name', async() => {
+        const builder = new IntentRequestBuilder('foo');
+
+        expect(builder.getIntentName()).to.equal('foo')      
     });
 });
