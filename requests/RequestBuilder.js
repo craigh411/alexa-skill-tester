@@ -1,11 +1,14 @@
 import Request from '../handlers/Request'
 import RandExp from 'randexp'
+import cloneDeep from 'lodash.clonedeep'
 
 export default class RequestBuilder {
 
     constructor(request) {
-        this.request = request
+        this.request = cloneDeep(request)
+        this.initting = true
         this.buildRequest()
+        this.initting = false
     }
 
     getRequest() {
@@ -44,7 +47,10 @@ export default class RequestBuilder {
     setSessionId(id) {
         let sessionId = id || this.generateRandomString('amzn1.ask.session')
 
-        this.request.session.sessionId = sessionId
+        if (this.shouldSet(this.request.session.sessionId)) {
+            this.request.session.sessionId = sessionId
+        }
+
         return this
     }
 
@@ -55,8 +61,10 @@ export default class RequestBuilder {
     setApplicationId(id) {
         let applicationId = id || this.generateRandomString('amzn1.ask.skill.')
 
-        this.request.session.application.applicationId = applicationId
-        this.request.context.System.application.applicationId = applicationId
+        if (this.shouldSet(this.request.session.application.applicationId)) {
+            this.request.session.application.applicationId = applicationId
+            this.request.context.System.application.applicationId = applicationId
+        }
 
         return this
     }
@@ -68,8 +76,10 @@ export default class RequestBuilder {
     setUserId(id) {
         let userId = id || new RandExp(/amzn1\.ask\.account\.[0-9A-Z]{207}/).gen();
 
-        this.request.session.user.userId = userId
-        this.request.context.System.user.userId = userId
+        if (this.shouldSet(this.request.session.user.userId)) {
+            this.request.session.user.userId = userId
+            this.request.context.System.user.userId = userId
+        }
 
         return this
     }
@@ -81,7 +91,9 @@ export default class RequestBuilder {
     setDeviceId(id) {
         let deviceId = id || new RandExp(/amzn1\.ask\.device\.[0-9A-Z]{156}/).gen();
 
-        this.request.context.System.device.deviceId = deviceId
+        if (this.shouldSet(this.request.context.System.device.deviceId)) {
+            this.request.context.System.device.deviceId = deviceId
+        }
 
         return this
     }
@@ -167,7 +179,10 @@ export default class RequestBuilder {
     }
 
     setTimestamp(timestamp) {
-        this.request.request.timestamp = timestamp || new Date(new Date().toUTCString().substr(0, 25)).toISOString()
+        if (this.shouldSet(this.request.request.timestamp)) {
+            this.request.request.timestamp = timestamp || new Date(new Date().toUTCString().substr(0, 25)).toISOString()
+        }
+
         return this
     }
 
@@ -182,7 +197,7 @@ export default class RequestBuilder {
     getRequestType() {
         return this.request.request.type
     }
-    
+
     setIntentName(intentName) {
         this.request.request.intent.name = intentName
     }
@@ -195,6 +210,10 @@ export default class RequestBuilder {
         var string = new RandExp(/[0-9a-z]{7}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{11}[0-9]/).gen();
 
         return prepend + string
+    }
+
+    shouldSet(prop) {
+        return !this.initting || (this.initting && !prop)
     }
 
 }

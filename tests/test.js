@@ -3,7 +3,7 @@ import { RequestBuilder, LaunchRequestBuilder, IntentRequestBuilder } from '../i
 import Request from '../handlers/Request'
 import LaunchRequest from '../requests/json/LaunchRequest.json'
 import IntentRequest from '../requests/json/IntentRequest.json'
-import cloneDeep from 'lodash.clonedeep'
+
 import path from 'path'
 
 describe('RequestBuilder', () => {
@@ -41,8 +41,8 @@ describe('RequestBuilder', () => {
 
     it('should set the session id to a random id', () => {
 
-        const sessionId1 = new RequestBuilder(cloneDeep(LaunchRequest))
-        const sessionId2 = new RequestBuilder(cloneDeep(LaunchRequest))
+        const sessionId1 = new RequestBuilder(LaunchRequest)
+        const sessionId2 = new RequestBuilder(LaunchRequest)
 
 
         expect(sessionId1.getSessionId()).not.to.equal(sessionId2.getSessionId())
@@ -60,8 +60,8 @@ describe('RequestBuilder', () => {
 
     it('should set the application id to a random id', () => {
 
-        const applicationId1 = new RequestBuilder(cloneDeep(LaunchRequest))
-        const applicationId2 = new RequestBuilder(cloneDeep(LaunchRequest))
+        const applicationId1 = new RequestBuilder(LaunchRequest)
+        const applicationId2 = new RequestBuilder(LaunchRequest)
 
         expect(applicationId1.getApplicationId()).not.to.equal(applicationId2.getApplicationId())
 
@@ -88,8 +88,8 @@ describe('RequestBuilder', () => {
 
     it('should set the user id to a random id', () => {
 
-        const userId1 = new RequestBuilder(cloneDeep(LaunchRequest))
-        const userId2 = new RequestBuilder(cloneDeep(LaunchRequest))
+        const userId1 = new RequestBuilder(LaunchRequest)
+        const userId2 = new RequestBuilder(LaunchRequest)
 
         expect(userId1.getUserId()).not.to.equal(userId2.getUserId())
 
@@ -185,7 +185,7 @@ describe('RequestBuilder', () => {
     });
 
     it('should set supported interfaces to the passed param', () => {
-        const builder = new RequestBuilder(cloneDeep(LaunchRequest))
+        const builder = new RequestBuilder(LaunchRequest)
         builder.setSupportedInterfaces({
             foo: 'bar'
         })
@@ -194,7 +194,7 @@ describe('RequestBuilder', () => {
     });
 
     it('should set the AudioPlayer interface', () => {
-        const builder = new RequestBuilder(cloneDeep(LaunchRequest))
+        const builder = new RequestBuilder(LaunchRequest)
         builder.supportsAudioInterface()
         assert.isObject(builder.getSupportedInterfaces().AudioPlayer)
     });
@@ -208,7 +208,7 @@ describe('RequestBuilder', () => {
     });
 
     it('should set the intent name', async() => {
-        const builder = new RequestBuilder(cloneDeep(IntentRequest))
+        const builder = new RequestBuilder(IntentRequest)
         builder.setIntentName('foo')
 
         expect(builder.getIntentName()).to.equal('foo')
@@ -216,7 +216,7 @@ describe('RequestBuilder', () => {
 
 
     it('should set the request type', async() => {
-        const builder = new RequestBuilder(cloneDeep(IntentRequest))
+        const builder = new RequestBuilder(IntentRequest)
         builder.setRequestType('foo')
         
         expect(builder.getRequestType()).to.equal('foo')
