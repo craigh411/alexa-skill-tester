@@ -1,4 +1,4 @@
-const lambdaLocal = require('lambda-local');
+import lambdaLocal from 'lambda-local'
 import path from 'path'
 import winston from 'winston'
 import RequestBuilder from '../requests/RequestBuilder'
