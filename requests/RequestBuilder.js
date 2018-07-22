@@ -205,6 +205,23 @@ export default class RequestBuilder {
         return this.request.request.intent.name
     }
 
+    /**
+     * sets the confirmation status for the intent.
+     * @param String status  - Possible values NONE, CONFIRMED, DENIED 
+     * @throws Error
+     */
+    setIntentConfirmationStatus(status) {
+        if (status === 'NONE' || status === 'CONFIRMED' || status === 'DENIED') {
+            this.request.request.intent.confirmationStatus = status
+        } else {
+            throw new Error('Confirmation status must be \'NONE\', \'CONFIRMED\' or \'DENIED\'')
+        }
+    }
+
+    getIntentConfirmationStatus() {
+        return this.request.request.intent.confirmationStatus
+    }
+
     generateRandomString(prepend = '') {
         var string = new RandExp(/[0-9a-z]{7}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{11}[0-9]/).gen()
 

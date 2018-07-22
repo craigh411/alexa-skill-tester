@@ -207,18 +207,34 @@ describe('RequestBuilder', () => {
         expect(builder.getTimestamp()).to.equal(now)
     });
 
-    it('should set the intent name', async() => {
+    it('should set the intent name', () => {
         const builder = new RequestBuilder(IntentRequest)
         builder.setIntentName('foo')
 
         expect(builder.getIntentName()).to.equal('foo')
     });
 
+    it('should set the intent confirmation status to valid values', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.setIntentConfirmationStatus('CONFIRMED')
+        expect(builder.getIntentConfirmationStatus()).to.equal('CONFIRMED')
+        builder.setIntentConfirmationStatus('DENIED')
+        expect(builder.getIntentConfirmationStatus()).to.equal('DENIED')
+        builder.setIntentConfirmationStatus('NONE')
+        expect(builder.getIntentConfirmationStatus()).to.equal('NONE')
+    });
+
+
+    it('should throw an error when the intent confirmation status is invalid', () => {
+        const builder = new RequestBuilder(IntentRequest)
+
+        expect(() => builder.setIntentConfirmationStatus('FOO')).to.throw(Error, 'Confirmation status must be \'NONE\', \'CONFIRMED\' or \'DENIED\'')
+    })
 
     it('should set the request type', async() => {
         const builder = new RequestBuilder(IntentRequest)
         builder.setRequestType('foo')
-        
+
         expect(builder.getRequestType()).to.equal('foo')
     });
 
@@ -253,7 +269,7 @@ describe('Client', () => {
 });
 
 describe('LaunchRequestBuilder', () => {
-	 it('should generate a LaunchRequest', async() => {
+    it('should generate a LaunchRequest', async() => {
         const builder = new LaunchRequestBuilder();
 
         expect(builder.getRequestType()).to.equal('LaunchRequest')
