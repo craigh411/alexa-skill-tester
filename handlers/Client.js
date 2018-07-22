@@ -1,5 +1,4 @@
 import lambdaLocal from 'lambda-local'
-import path from 'path'
 import winston from 'winston'
 import RequestBuilder from '../requests/RequestBuilder'
 
@@ -23,8 +22,8 @@ class Client {
                 resolve(done)
             }).catch(err => {
                 reject(err)
-            });
-        });
+            })
+        })
     }
 
     static setLogger(suppress, file) {
@@ -32,20 +31,20 @@ class Client {
         var transports = []
 
         if (!suppress) transports.push(new(winston.transports.Console)())
-        if (!!file) transports.push(new(winston.transports.File)({ filename: file }))
+        if (file) transports.push(new(winston.transports.File)({ filename: file }))
 
 
         lambdaLocal.setLogger(new(winston.Logger)({
             transports: transports
-        }));
+        }))
     }
 
     static getDefaultConfig() {
-    	return {
+        return {
             lambdaPath: '../../../index.js', // this is probably the root, but it can be overridden
             lambdaHandler: 'handler',
             timeoutMs: 3000,
-    	}
+        }
     }
 }
 

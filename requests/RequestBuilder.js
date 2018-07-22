@@ -38,7 +38,7 @@ export default class RequestBuilder {
         return this
     }
 
-    getIsNewSession(isNew) {
+    getIsNewSession() {
         return this.request.session.new
     }
 
@@ -73,7 +73,7 @@ export default class RequestBuilder {
     }
 
     setUserId(id) {
-        let userId = id || new RandExp(/amzn1\.ask\.account\.[0-9A-Z]{207}/).gen();
+        let userId = id || new RandExp(/amzn1\.ask\.account\.[0-9A-Z]{207}/).gen()
 
         if (this.shouldSet(this.request.session.user.userId)) {
             this.request.session.user.userId = userId
@@ -88,7 +88,7 @@ export default class RequestBuilder {
     }
 
     setDeviceId(id) {
-        let deviceId = id || new RandExp(/amzn1\.ask\.device\.[0-9A-Z]{156}/).gen();
+        let deviceId = id || new RandExp(/amzn1\.ask\.device\.[0-9A-Z]{156}/).gen()
 
         if (this.shouldSet(this.request.context.System.device.deviceId)) {
             this.request.context.System.device.deviceId = deviceId
@@ -112,7 +112,7 @@ export default class RequestBuilder {
     }
 
     addSupportedInterface(name, value = {}) {
-        this.request.context.System.device.supportedInterfaces[name] = {}
+        this.request.context.System.device.supportedInterfaces[name] = value
 
         return this
     }
@@ -157,7 +157,7 @@ export default class RequestBuilder {
      * Sets an API access token for the request
      */
     setApiAccessToken(token) {
-        token = token || new RandExp(/[0-9A-Z_]{50}/).gen();
+        token = token || new RandExp(/[0-9A-Z_]{50}/).gen()
         this.request.context.System.apiAccessToken = token
 
 
@@ -206,7 +206,7 @@ export default class RequestBuilder {
     }
 
     generateRandomString(prepend = '') {
-        var string = new RandExp(/[0-9a-z]{7}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{11}[0-9]/).gen();
+        var string = new RandExp(/[0-9a-z]{7}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{11}[0-9]/).gen()
 
         return prepend + string
     }
