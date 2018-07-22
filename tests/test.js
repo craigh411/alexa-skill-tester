@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai'
 import { RequestBuilder, LaunchRequestBuilder, IntentRequestBuilder } from '../index.js'
-import Request from '../handlers/Request'
+import Client from '../handlers/Client'
 import LaunchRequest from '../requests/json/LaunchRequest.json'
 import IntentRequest from '../requests/json/IntentRequest.json'
 
@@ -240,13 +240,13 @@ describe('RequestBuilder', () => {
 
 
 
-describe('Request', () => {
-    it('should return the launch response', async() => {
+describe('Client', () => {
+    it('should send the request and return the launch response', async() => {
         const config = {
             lambdaPath: path.join(__dirname, '/helpers', '/helloworld.js'),
         }
 
-        const response = await Request.send(LaunchRequest, config, true)
+        const response = await Client.send(LaunchRequest, config, true)
         expect(response.response.outputSpeech.ssml).to.equal('<speak>Hello World!</speak>')
 
     });
@@ -267,7 +267,7 @@ describe('LaunchRequestBuilder', () => {
         }
 
 
-        const response = await Request.send(request, config, true)
+        const response = await Client.send(request, config, true)
         expect(response.response.outputSpeech.ssml).to.equal('<speak>Hello World!</speak>')
 
     });

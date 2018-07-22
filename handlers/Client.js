@@ -3,7 +3,7 @@ import path from 'path'
 import winston from 'winston'
 import RequestBuilder from '../requests/RequestBuilder'
 
-class Request {
+class Client {
     static async send(request, config, suppressConsoleOutput = false, logFile = null) {
         // Allow us to send requests to file and or suppress them from the console.
         if (!!logFile || suppressConsoleOutput) {
@@ -50,4 +50,4 @@ class Request {
 }
 
 
-export default Request
+export default Client

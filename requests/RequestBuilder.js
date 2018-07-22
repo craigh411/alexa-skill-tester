@@ -1,4 +1,3 @@
-import Request from '../handlers/Request'
 import RandExp from 'randexp'
 import cloneDeep from 'lodash.clonedeep'
 
