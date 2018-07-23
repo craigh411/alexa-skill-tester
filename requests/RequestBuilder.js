@@ -212,7 +212,7 @@ export default class RequestBuilder {
      * @param {Object} value - The value of the supported interface. Defaults to an empty object
      * @returns {RequestBuilder}
      */
-    addSupportedInterface(name, value = {}) {
+    withSupportedInterface(name, value = {}) {
         this.request.context.System.device.supportedInterfaces[name] = value
 
         return this
@@ -224,8 +224,8 @@ export default class RequestBuilder {
      * @param {Object} value - The value of the supported interface. Defaults to an empty object
      * @returns {RequestBuilder}
      */
-    supportsAudioInterface(value = {}) {
-        this.addSupportedInterface('AudioPlayer', value)
+    withAudioInterface(value = {}) {
+        this.withSupportedInterface('AudioPlayer', value)
 
         return this
     }
@@ -442,13 +442,200 @@ export default class RequestBuilder {
     }
 
     /**
+     * Sets the request's intent slots property
+     *
+     * @param {Object} slots
+     * @throws Error
+     * @returns {RequestBuilder}
+     */
+    setSlots(slots) {
+        this.request.slots = slots
+
+        return this
+    }
+
+    /**
+     * Gets the request's intent slots property
+     *
+     * @param {Object} slots
+     * @throws Error
+     * @returns {RequestBuilder}
+     */
+    getSlots(slots) {
+        return this.request.slots
+    }
+
+    /**
+     * Returns the slot for the given name
+     *
+     * @param {String} name - The name of the slot
+     * @return {Object} - the slot object
+     */
+    getSlot(name) {
+        if (this.request.slots) {
+            if (this.request.slots[name]) {
+                return this.request.slots[name]
+            }
+        }
+
+        throw new Error('Unable to get slot. ' + name + ' doesn\'t exist.')
+    }
+
+    /**
+     *
+     */
+    getSlotId(name) {
+
+    }
+
+    /**
+     * Resolves a slot to it's names
+     *
+     * @param {String} name - The names of the slot
+     * @return {array} - And array of slot names
+     */
+    resolveSlotToNames(name) {
+        try {
+            return this.resolveSlot(name).map(value => value.value.name);
+        } catch (err) {
+            throw new Error(err)
+        }
+    }
+
+    /**
+     * Resolves a slot to it's ids
+     *
+     * @param {String} name - The names of the slot
+     * @return {array} - And array of slot ids
+     */
+    resolveSlotToIds(name) {
+        try {
+            return this.resolveSlot(name).map(value => value.value.id);
+        } catch (err) {
+            throw new Error(err)
+        }
+    }
+
+    /**
+     * Resolves a slot to it's original values
+     *
+     * @param {String} name - The names of the slot
+     */
+    resolveSlot(name) {
+        try {
+            return this.getSlot(name).resolutions.resolutionsPerAuthority.map(resolution => resolution.values)[0]
+        } catch (err) {
+            throw new Error(err)
+        }
+    }
+
+    /**
+     * Creates a slot that has been resolved via a synonym. If no id is passed, a random id will be assigned
+     *
+     * @param {String} name - The name of the slot
+     * @param {String} value - The slots resolved value 
+     * @param {String} synonym - The synonym that is being resolved
+     * @param {String} id - The slot id. If not set a random id is assigned
+     * @return {RequestBuilder}
+     */
+    withSynonymSlot(name, value, synonym, id) {
+        this.__initSlots()
+        let slot = this.request.slots[name]
+        id = (id) ? id : new RandExp(/[0-9a-f]/).gen()
+
+        this.request.slots[name] = {
+            name: name,
+            value: synonym,
+            resolutions: {
+                resolutionsPerAuthority: [{
+                    authority: "amzn1.er-authority.echo-sdk.amzn1.ask.skill." + this.getApplicationId + "." + name,
+                    status: {
+                        code: 'ER_SUCCESS_MATCH'
+                    },
+                    values: [{
+                        value: {
+                            name: value,
+                            id: id
+                        }
+                    }]
+                }]
+            }
+        }
+
+        return this
+    }
+
+
+    /**
+     * Creates a slot with the given name, value and id. If no id is passed, a random id will be assigned
+     *
+     * @param {String} name - The name of the slot
+     * @param {String} value - The value of the slot
+     * @param {String} id - The slot id. If not set a random id is assigned
+     * @return {RequestBuilder}
+     */
+    withSlot(name, value, id) {
+        this.__initSlots()
+        let slot = this.request.slots[name]
+        id = (id) ? id : new RandExp(/[0-9a-f]{32}/).gen()
+
+        this.request.slots[name] = {
+            name: name,
+            value: value,
+            resolutions: {
+                resolutionsPerAuthority: [{
+                    authority: "amzn1.er-authority.echo-sdk.amzn1.ask.skill." + this.getApplicationId + "." + name,
+                    status: {
+                        code: 'ER_SUCCESS_MATCH'
+                    },
+                    values: [{
+                        value: {
+                            name: name,
+                            id: id
+                        }
+                    }]
+                }]
+            }
+        }
+
+        return this
+    }
+
+
+    withFailedSlot() {
+        this.__initSlots()
+    }
+
+    withMultipleResolutionsSlot() {
+        this.__initSlots()
+    }
+
+    /**
+     * Adds the slots object to the request if it doesn't already exist
+     */
+    __initSlots() {
+        if (!this.request.slots) {
+            this.request.slots = {}
+        }
+    }
+
+    withSlotResolutions(slotName) {
+        if (this.request.slots[slotName]) {
+
+        } else {
+            throw new Error('Unable to add resolution. ' + slotName + ' doesn\'t exist. Make sure you create the slot first (see: withSlot method)')
+        }
+    }
+
+
+    /**
      * Generates a random string in Alexa's id format
      *
      * @param prepend - The value to prepend to the string
      * @returns {String}
      */
     __generateRandomString(prepend = '') {
-        let string = new RandExp(/[0-9a-z]{7}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{3}[0-9]-[0-9a-z]{11}[0-9]/).gen()
+        let string = new RandExp(/[0-9a-f]{7}[0-9]-[0-9a-f]{3}[0-9]-[0-9a-f]{3}[0-9]-[0-9a-f]{3}[0-9]-[0-9a-f]{11}[0-9]/).gen()
 
         return prepend + string
     }

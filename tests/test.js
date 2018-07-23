@@ -195,7 +195,7 @@ describe('RequestBuilder', () => {
 
     it('should set the AudioPlayer interface', () => {
         const builder = new RequestBuilder(LaunchRequest)
-        builder.supportsAudioInterface()
+        builder.withAudioInterface()
         assert.isObject(builder.getSupportedInterfaces().AudioPlayer)
     });
 
@@ -207,12 +207,71 @@ describe('RequestBuilder', () => {
         expect(builder.getTimestamp()).to.equal(now)
     });
 
+
     it('should set the intent name', () => {
         const builder = new RequestBuilder(IntentRequest)
         builder.setIntentName('foo')
 
         expect(builder.getIntentName()).to.equal('foo')
     });
+
+
+    it('should set the slots property', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.setSlots({ foo: 'bar' })
+
+        expect(builder.getSlots().foo).to.equal('bar')
+    });
+
+    it('should create a slot', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSlot('foo', 'bar', 'baz')
+
+        expect(builder.getSlot('foo').value).to.equal('bar')
+        expect(builder.resolveSlot('foo')[0].value.id).to.equal('baz')
+    });
+
+    it('should create a synonym slot', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSynonymSlot('foo', 'bar', 'baz', 'qux')
+
+        expect(builder.getSlot('foo').value).to.equal('baz')
+        expect(builder.resolveSlot('foo')[0].value.name).to.equal('bar')
+    });
+
+
+
+    it('should resolves a slot to names', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSynonymSlot('foo', 'bar', 'baz', 'qux')
+
+        expect(builder.getSlot('foo').value).to.equal('baz')
+        expect(builder.resolveSlotToNames('foo')[0]).to.equal('bar')
+    });
+
+
+    it('should resolves a slot to ids', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSynonymSlot('foo', 'bar', 'baz', 'qux')
+
+        expect(builder.getSlot('foo').value).to.equal('baz')
+        expect(builder.resolveSlotToIds('foo')[0]).to.equal('qux')
+    });
+
+    it('should throw an error when slot object doesn\'t exist', () => {
+        const builder = new RequestBuilder(IntentRequest)
+
+        expect(builder.request.slots).to.be.undefined
+        expect(() => builder.getSlot('foo').value).to.throw(Error, 'Unable to get slot. foo doesn\'t exist.')
+    });
+
+    it('should throw an error when slot name doesn\'t exist', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSlot('bar', 'bar', 'baz')
+        assert.isObject(builder.request.slots)
+        expect(() => builder.getSlot('foo').value).to.throw(Error, 'Unable to get slot. foo doesn\'t exist.')
+    });
+
 
     it('should set the intent confirmation status to valid values', () => {
         const builder = new RequestBuilder(IntentRequest)
