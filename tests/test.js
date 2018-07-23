@@ -239,6 +239,12 @@ describe('RequestBuilder', () => {
         expect(builder.resolveSlot('foo')[0].value.name).to.equal('bar')
     });
 
+    it('should throw an error when resolving slot name that doesn\'t exist', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSlot('bar', 'bar', 'baz')
+        assert.isObject(builder.request.slots)
+        expect(() => builder.resolveSlot('foo').value).to.throw(Error, 'Unable to get slot. foo doesn\'t exist.')
+    });
 
 
     it('should resolves a slot to names', () => {
@@ -249,6 +255,13 @@ describe('RequestBuilder', () => {
         expect(builder.resolveSlotToNames('foo')[0]).to.equal('bar')
     });
 
+    it('should throw an error when resolving names to slot name that doesn\'t exist', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSlot('bar', 'bar', 'baz')
+        assert.isObject(builder.request.slots)
+        expect(() => builder.resolveSlotToNames('foo').value).to.throw(Error, 'Unable to get slot. foo doesn\'t exist.')
+    });
+
 
     it('should resolves a slot to ids', () => {
         const builder = new RequestBuilder(IntentRequest)
@@ -256,6 +269,13 @@ describe('RequestBuilder', () => {
 
         expect(builder.getSlot('foo').value).to.equal('baz')
         expect(builder.resolveSlotToIds('foo')[0]).to.equal('qux')
+    });
+
+    it('should throw an error when resolving ids to slot name that doesn\'t exist', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.withSlot('bar', 'bar', 'baz')
+        assert.isObject(builder.request.slots)
+        expect(() => builder.resolveSlotToIds('foo').value).to.throw(Error, 'Unable to get slot. foo doesn\'t exist.')
     });
 
     it('should throw an error when slot object doesn\'t exist', () => {
