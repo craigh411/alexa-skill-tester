@@ -231,6 +231,23 @@ describe('RequestBuilder', () => {
         expect(() => builder.setIntentConfirmationStatus('FOO')).to.throw(Error, 'Confirmation status must be \'NONE\', \'CONFIRMED\' or \'DENIED\'')
     })
 
+    it('should set the intent dialog state to valid values', () => {
+        const builder = new RequestBuilder(IntentRequest)
+        builder.setDialogState('STARTED')
+        expect(builder.getDialogState()).to.equal('STARTED')
+        builder.setDialogState('IN_PROGRESS')
+        expect(builder.getDialogState()).to.equal('IN_PROGRESS')
+        builder.setDialogState('COMPLETED')
+        expect(builder.getDialogState()).to.equal('COMPLETED')
+    });
+
+
+    it('should throw an error when the intent dialog state is invalid', () => {
+        const builder = new RequestBuilder(IntentRequest)
+
+        expect(() => builder.setDialogState('FOO')).to.throw(Error, 'dialogState must be \'STARTED\', \'IN_PROGRESS\', or \'COMPLETED\'')
+    })
+
     it('should set the request type', async() => {
         const builder = new RequestBuilder(IntentRequest)
         builder.setRequestType('foo')

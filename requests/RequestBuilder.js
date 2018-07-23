@@ -405,6 +405,7 @@ export default class RequestBuilder {
         }
     }
 
+
     /**
      * Gets the request's intent ConfirmationStatus property.
      *
@@ -412,6 +413,32 @@ export default class RequestBuilder {
      */
     getIntentConfirmationStatus() {
         return this.request.request.intent.confirmationStatus
+    }
+
+    /**
+     * Sets the request's dialogState property (see: https://developer.amazon.com/docs/custom-skills/dialog-interface-reference.html)
+     *
+     * @param {String} state - Possible values STARTED, IN_PROGRESS, COMPLETED
+     * @throws Error
+     * @returns {RequestBuilder}
+     */
+    setDialogState(state) {
+        if (state === 'STARTED' || state === 'IN_PROGRESS' || state === 'COMPLETED') {
+            this.request.request.dialogState = state
+
+            return this
+        } else {
+            throw new Error('dialogState must be \'STARTED\', \'IN_PROGRESS\', or \'COMPLETED\'')
+        }
+    }
+
+    /**
+     * Gets the request's intent dialogState property.
+     *
+     * @returns {String} intentName
+     */
+    getDialogState() {
+        return this.request.request.dialogState
     }
 
     /**
