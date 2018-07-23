@@ -461,7 +461,7 @@ export default class RequestBuilder {
      * @throws Error
      * @returns {RequestBuilder}
      */
-    getSlots(slots) {
+    getSlots() {
         return this.request.slots
     }
 
@@ -481,12 +481,6 @@ export default class RequestBuilder {
         throw new Error('Unable to get slot. ' + name + ' doesn\'t exist.')
     }
 
-    /**
-     *
-     */
-    getSlotId(name) {
-
-    }
 
     /**
      * Resolves a slot to it's names
@@ -496,7 +490,7 @@ export default class RequestBuilder {
      */
     resolveSlotToNames(name) {
         try {
-            return this.resolveSlot(name).map(value => value.value.name);
+            return this.resolveSlot(name).map(value => value.value.name)
         } catch (err) {
             throw new Error(err)
         }
@@ -510,7 +504,7 @@ export default class RequestBuilder {
      */
     resolveSlotToIds(name) {
         try {
-            return this.resolveSlot(name).map(value => value.value.id);
+            return this.resolveSlot(name).map(value => value.value.id)
         } catch (err) {
             throw new Error(err)
         }
@@ -540,7 +534,6 @@ export default class RequestBuilder {
      */
     withSynonymSlot(name, value, synonym, id) {
         this.__initSlots()
-        let slot = this.request.slots[name]
         id = (id) ? id : new RandExp(/[0-9a-f]/).gen()
 
         this.request.slots[name] = {
@@ -548,7 +541,7 @@ export default class RequestBuilder {
             value: synonym,
             resolutions: {
                 resolutionsPerAuthority: [{
-                    authority: "amzn1.er-authority.echo-sdk.amzn1.ask.skill." + this.getApplicationId + "." + name,
+                    authority: 'amzn1.er-authority.echo-sdk.amzn1.ask.skill.' + this.getApplicationId + '.' + name,
                     status: {
                         code: 'ER_SUCCESS_MATCH'
                     },
@@ -576,7 +569,6 @@ export default class RequestBuilder {
      */
     withSlot(name, value, id) {
         this.__initSlots()
-        let slot = this.request.slots[name]
         id = (id) ? id : new RandExp(/[0-9a-f]{32}/).gen()
 
         this.request.slots[name] = {
@@ -584,7 +576,7 @@ export default class RequestBuilder {
             value: value,
             resolutions: {
                 resolutionsPerAuthority: [{
-                    authority: "amzn1.er-authority.echo-sdk.amzn1.ask.skill." + this.getApplicationId + "." + name,
+                    authority: 'amzn1.er-authority.echo-sdk.amzn1.ask.skill.' + this.getApplicationId + '.' + name,
                     status: {
                         code: 'ER_SUCCESS_MATCH'
                     },
@@ -618,15 +610,6 @@ export default class RequestBuilder {
             this.request.slots = {}
         }
     }
-
-    withSlotResolutions(slotName) {
-        if (this.request.slots[slotName]) {
-
-        } else {
-            throw new Error('Unable to add resolution. ' + slotName + ' doesn\'t exist. Make sure you create the slot first (see: withSlot method)')
-        }
-    }
-
 
     /**
      * Generates a random string in Alexa's id format

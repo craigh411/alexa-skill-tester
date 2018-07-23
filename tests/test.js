@@ -266,7 +266,7 @@ describe('RequestBuilder', () => {
     it('should resolves a slot to ids', () => {
         const builder = new RequestBuilder(IntentRequest)
         builder.withSynonymSlot('foo', 'bar', 'baz', 'qux')
-
+        console.log(builder.getRequest())
         expect(builder.getSlot('foo').value).to.equal('baz')
         expect(builder.resolveSlotToIds('foo')[0]).to.equal('qux')
     });
